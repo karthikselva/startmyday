@@ -2,6 +2,7 @@ Startmyday::Application.routes.draw do
 
   root 'dictionaries#greet'
   get 'words/today' => 'dictionaries#today'
+  get 'proverbs/today' => 'proverbs#today'
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
