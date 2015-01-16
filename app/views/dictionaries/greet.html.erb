@@ -1,0 +1,48 @@
+<nav class="navbar navbar-default navbar-fixed-top">
+  <div class="container">
+      <a class="navbar-brand" href="#">Startmyday</a>
+      	<button class="btn" id="refresh" >
+		<i class="glyphicon glyphicon-refresh"></i>
+	 	Refresh 
+	</button>
+
+  </div>
+</nav>
+
+<div id="app" style="padding-top:50px">
+</div>
+
+<script>
+
+function reloadWords() {
+	$('#app').html(' 	Loading please wait ... ');
+	$.getJSON('/words/today',function(dicts) {
+		$('#app').html('');
+		for(var i in dicts) {
+			data = dicts[i];
+		panel = $('<div/>', {
+		                "class":"panel panel-info"
+		            });
+		heading =  $('<div/>', {
+		                "class":"panel panel-heading"
+		            });
+		heading.html(data["word"]);
+
+		body =  $('<div/>', {
+		                "class":"panel panel-body"
+		            });
+		body.html(data["meaning"]);
+
+		panel.append(heading);
+		panel.append(body);
+		$('#app').append(panel);
+	}
+	});
+}
+
+$('#refresh').on('click',function(event) {
+	reloadWords();
+});
+
+reloadWords();
+</script>
