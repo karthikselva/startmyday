@@ -1,48 +1,135 @@
-<nav class="navbar navbar-default navbar-fixed-top">
-  <div class="container">
-      <a class="navbar-brand" href="#">Startmyday</a>
-      	<button class="btn" id="refresh" >
-		<i class="glyphicon glyphicon-refresh"></i>
-	 	Refresh 
-	</button>
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">Start My Day</a>
+    </div>
 
-  </div>
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li class="active" id="refreshWords" ><a href="#"> Words for me <span class="sr-only">(current)</span></a></li>
+        <li id="refreshProverbs"><a href="#"> Proverbs for me </a></li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Dropdown <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+            <li><a href="#">Action</a></li>
+            <li><a href="#">Another action</a></li>
+            <li><a href="#">Something else here</a></li>
+            <li class="divider"></li>
+            <li><a href="#">Separated link</a></li>
+            <li class="divider"></li>
+            <li><a href="#">One more separated link</a></li>
+          </ul>
+        </li>
+      </ul>
+      <form class="navbar-form navbar-left" role="search">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search a word">
+        </div>
+        <button type="submit" class="btn btn-default">Go</button>
+      </form>
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="#">Link</a></li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Dropdown <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+            <li><a href="#">Action</a></li>
+            <li><a href="#">Another action</a></li>
+            <li><a href="#">Something else here</a></li>
+            <li class="divider"></li>
+            <li><a href="#">Separated link</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
 </nav>
 
-<div id="app" style="padding-top:50px">
+
+
+
+
+<div id="container" class="row">
+	<div id="wordPanel" class="col-md-6"></div>
+	<div id="proverbPanel" class="col-md-6"></div>
 </div>
 
 <script>
 
-function reloadWords() {
-	$('#app').html(' 	Loading please wait ... ');
-	$.getJSON('/words/today',function(dicts) {
-		$('#app').html('');
-		for(var i in dicts) {
-			data = dicts[i];
-		panel = $('<div/>', {
-		                "class":"panel panel-info"
-		            });
-		heading =  $('<div/>', {
-		                "class":"panel panel-heading"
-		            });
-		heading.html(data["word"]);
+	function reloadWords(id) {
+		$('#'+id).html(' 	Loading please wait ... ');
+		$.getJSON('/words/today',function(dicts) {
+			$('#'+id).html('');
+			for(var i in dicts) {
+				data = dicts[i];
+			panel = $('<div/>', {
+			                "class":"panel panel-info"
+			            });
+			heading =  $('<div/>', {
+			                "class":"panel panel-heading"
+			            });
+			heading.html(data["word"]);
 
-		body =  $('<div/>', {
-		                "class":"panel panel-body"
-		            });
-		body.html(data["meaning"]);
+			body =  $('<div/>', {
+			                "class":"panel panel-body"
+			            });
+			body.html(data["meaning"]);
 
-		panel.append(heading);
-		panel.append(body);
-		$('#app').append(panel);
+			panel.append(heading);
+			panel.append(body);
+			$('#'+id).append(panel);
+		}
+		});
 	}
+
+
+	function reloadProverbs(id) {
+		$('#'+id).html(' 	Loading please wait ... ');
+		$.getJSON('/proverbs/today',function(dicts) {
+			$('#'+id).html('');
+			for(var i in dicts) {
+
+			data = dicts[i];
+			proverbId = parseInt(i)+1;
+			panel = $('<div/>', {
+			                "class":"panel panel-success"
+			            });
+			heading =  $('<div/>', {
+			                "class":"panel panel-heading"
+			            });
+			heading.html(" Proverb #"+proverbId);
+
+			body =  $('<div/>', {
+			                "class":"panel panel-body"
+			            });
+			body.html(data["text"]);
+
+			panel.append(heading);
+			panel.append(body);
+			$('#'+id).append(panel);
+		}
+		});
+	}
+
+	$('#refreshWords').on('click',function(event) {
+		$('ul.navbar-nav li').removeClass('active');
+		$(this).addClass('active');
+		reloadWords('wordPanel');
 	});
-}
 
-$('#refresh').on('click',function(event) {
-	reloadWords();
-});
+	$('#refreshProverbs').on('click',function(event) {
+		$('ul.navbar-nav li').removeClass('active');
+		$(this).addClass('active');
+		reloadProverbs('proverbPanel');
+	});
 
-reloadWords();
+	reloadWords('wordPanel');
+	reloadProverbs('proverbPanel');
 </script>

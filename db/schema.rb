@@ -11,12 +11,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150116154328) do
+ActiveRecord::Schema.define(version: 20150116223724) do
 
   create_table "dictionaries", force: true do |t|
     t.string   "word"
     t.text     "meaning"
     t.string   "language"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "proverbs", force: true do |t|
+    t.text     "text"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
